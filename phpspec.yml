@@ -1,0 +1,5 @@
+suites:
+  types:
+    namespace: Madkom
+    psr4_prefix: Madkom
+    spec_path: tests

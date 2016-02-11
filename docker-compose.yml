@@ -1,0 +1,4 @@
+pacto-mock-server:
+  image: madkom/pact-mock-service:latest
+  ports:
+    - "1234:1234"
