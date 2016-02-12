@@ -39,4 +39,10 @@ class ContentSpec extends ObjectBehavior
         $this->shouldThrow(PactoException::class)->during('__construct', ['some', []]);
     }
 
+    function it_should_not_exception_if_passed_with_integer_keys()
+    {
+        $this->shouldNotThrow(PactoException::class)->during('__construct', [0, "test"]);
+        $this->shouldNotThrow(PactoException::class)->during('__construct', ['0', "test"]);
+    }
+
 }

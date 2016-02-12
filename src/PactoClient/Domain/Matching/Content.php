@@ -42,7 +42,7 @@ class Content
     }
 
     /**
-     * @return int|string
+     * @return int|string|\JsonSerializable
      */
     public function value()
     {
@@ -56,7 +56,7 @@ class Content
      */
     private function setKey($key)
     {
-        if (!$key) {
+        if (!($key === 0) && !($key === '0') && !$key) {
             throw new PactoException("Can't set empty key for Content");
         }
 

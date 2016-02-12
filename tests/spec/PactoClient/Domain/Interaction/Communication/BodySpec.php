@@ -69,11 +69,37 @@ class BodySpec extends ObjectBehavior
         ]);
     }
 
-    function it_should_handle_matching_objects()
-    {
-        $this->add('name', Pact::like('some'));
-        $this->add('dateOfBirth', Pact::term("02/11/2013", "/\d{2}\/\d{2}\/\d{4}/"));
-//        $this->add("children", Pact::eachLike())
-    }
+//    function it_should_handle_matching_objects()
+//    {
+//        $this->add('name', Pact::like('some'));
+//        $this->add('dateOfBirth', Pact::term("02/11/2013", "/\d{2}\/\d{2}\/\d{4}/"));
+//        $this->add("children", Pact::eachLike(["name" => "Fred", "age" => 2]));
+//        $this->add('age', 'some');
+//
+//        $this->jsonSerialize()->shouldReturn([
+//            'name' => [
+//                "json_class" => "Pact::SomethingLike",
+//                "contents"   => "some"
+//            ],
+//            "dateOfBirth" => [
+//                "json_class" => "Pact::Term",
+//                "data" => [
+//                    "generate" => "02/11/2013",
+//                    "matcher" => [
+//                        "json_class" => "Regexp",
+//                        "o"          => 0,
+//                        "s"          => "/\d{2}\/\d{2}\/\d{4}/"
+//                    ]
+//                ]
+//            ],
+//            "children" => [
+//                "json_class" => "Pact::ArrayLike",
+//                "contents"   => [
+//                    "json_class" => "Pact::ArrayLike",
+//                    "contents"
+//                ]
+//            ]
+//        ]);
+//    }
 
 }

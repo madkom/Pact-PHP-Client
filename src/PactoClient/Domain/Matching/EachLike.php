@@ -36,22 +36,38 @@ class EachLike implements \JsonSerializable
             if (!($content instanceof Content)) {
                 throw new PactoException("Passed content are not type of Content");
             }
-            $this->contents[$content->key()] = $content->value();
+            $value = $content->value() instanceof \JsonSerializable ? $content->value()->jsonSerialize() : $content->value();
+
+            $this->contents[$content->key()] = $value;
         }
 
-        $this->min      = $min;
+        $this->setMinValue($min);
     }
 
     /**
      * @return array
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "json_class" => "Pact::ArrayLike",
-            "contents"   => $this->contents,
+            "contents"   => $this->contents ? $this->contents : null,
             "min"        => $this->min
         ];
+    }
+
+    /**
+     * @param int $min
+     *
+     * @throws PactoException
+     */
+    private function setMinValue($min)
+    {
+        if (!$min || $min < 1) {
+            throw new PactoException("Can't set minimum for EachLike lower than 1");
+        }
+
+        $this->min = $min;
     }
 
 }
