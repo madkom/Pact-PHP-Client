@@ -36,140 +36,140 @@ class InteractionSpec extends ObjectBehavior
         $this->shouldHaveType(\JsonSerializable::class);
     }
 
-//    function it_should_return_as_array()
-//    {
-//        $description   = new Description('A request for foo');
-//        $providerState = new ProviderState('foo exists');
-//
-//        $request = $this->createRequest(Method::GET, '/client', [
-//            "name" => "franek"
-//        ], [
-//            "accept" => "application/json"
-//        ]);
-//        $response = $this->createResponse(StatusCode::OK_CODE, [], [
-//            "Content-Type" => "application/json"
-//        ]);
-//
-//        $this->beConstructedWith($providerState, $description, $request, $response);
-//
-//        $this->jsonSerialize()->shouldReturn(
-//            [
-//                "description"       => 'A request for foo',
-//                "provider_state"    => 'foo exists',
-//                "request" => [
-//                    "method"  => "get",
-//                    "path"    => "/client",
-//                    "headers" => [
-//                        "accept" => "application/json"
-//                    ],
-//                    "body" => [
-//                        "name" => "franek"
-//                    ]
-//                ],
-//                "response" => [
-//                    "status"  => 200,
-//                    "headers" => [
-//                        "Content-Type" => "application/json"
-//                    ],
-//                    "body" => []
-//                ]
-//            ]
-//        );
-//    }
+    function it_should_return_as_array()
+    {
+        $description   = new Description('A request for foo');
+        $providerState = new ProviderState('foo exists');
 
-//    function it_should_return_correct_array_for_nested_matchers()
-//    {
-//        $description   = new Description('A request for foo');
-//        $providerState = new ProviderState('foo exists');
-//
-//        $request = $this->createRequest(
-//            Method::GET,
-//            '/client',
-//            [],
-//            [
-//                "accept" => "application/json"
-//            ]
-//        );
-//        $response = $this->createResponse(
-//            StatusCode::OK_CODE,
-//            [
-//                "match" => Pact::eachLike([
-//                    Pact::eachLike([
-//                        "size"      => Pact::like(10),
-//                        "colour"    => Pact::term("red", "red|green|blue"),
-//                        "tag"       => Pact::eachLike([
-//                            Pact::like("jumper"),
-//                            Pact::like("shirt")
-//                        ], 2)
-//                    ])
-//                ])
-//            ],
-//            [
-//                "Content-Type" => "application/json"
-//            ]
-//        );
-//
-//        $this->beConstructedWith($providerState, $description, $request, $response);
-//
-//        $this->jsonSerialize()->shouldReturn(
-//            [
-//                "description"       => 'A request for foo',
-//                "provider_state"    => 'foo exists',
-//                "request" => [
-//                    "method"  => "get",
-//                    "path"    => "/client",
-//                    "headers" => [
-//                        "accept" => "application/json"
-//                    ],
-//                    "body" => []
-//                ],
-//                "response" => [
-//                    "status"  => 200,
-//                    "headers" => [
-//                        "Content-Type" => "application/json"
-//                    ],
-//                    "body" => [
-//                       "match" =>
-//                           [
-//                               "json_class" => "Pact::ArrayLike",
-//                                "contents" => [
-//                                    "size" => [
-//                                        "json_class" => "Pact::SomethingLike",
-//                                        "contents"   => 10
-//                                    ],
-//                                    "colour" => [
-//                                        "json_class" => "Pact::Term",
-//                                        "data" => [
-//                                            "generate" => "red",
-//                                            "matcher" => [
-//                                                "json_class" => "Regexp",
-//                                                "o"          => 0,
-//                                                "s"          => "red|green|blue"
-//                                            ]
-//                                        ]
-//                                    ],
-//                                    "tag" => [
-//                                        "json_class" => "Pact::ArrayLike",
-//                                        "contents"   => [
-//                                            [
-//                                                "json_class" => "Pact::SomethingLike",
-//                                                "contents" => "jumper"
-//                                            ],
-//                                            [
-//                                                "json_class" => "Pact::SomethingLike",
-//                                                "contents"   => "shirt"
-//                                            ]
-//                                        ],
-//                                        "min" => 2
-//                                    ]
-//                                ],
-//                                "min" => 1
-//                            ]
-//                    ]
-//                ]
-//            ]
-//        );
-//    }
+        $request = $this->createRequest(Method::GET, '/client', [
+            "name" => "franek"
+        ], [
+            "accept" => "application/json"
+        ]);
+        $response = $this->createResponse(StatusCode::OK_CODE, [], [
+            "Content-Type" => "application/json"
+        ]);
+
+        $this->beConstructedWith($providerState, $description, $request, $response);
+
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
+            "description"       => 'A request for foo',
+            "provider_state"    => 'foo exists',
+            "request" => [
+                "method"  => "get",
+                "path"    => "/client",
+                "headers" => [
+                    "accept" => "application/json"
+                ],
+                "body" => [
+                    "name" => "franek"
+                ]
+            ],
+            "response" => [
+                "status"  => 200,
+                "headers" => [
+                    "Content-Type" => "application/json"
+                ],
+                "body" => []
+            ]
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
+    }
+
+    function it_should_return_correct_array_for_nested_matchers()
+    {
+        $description   = new Description('A request for foo');
+        $providerState = new ProviderState('foo exists');
+
+        $request = $this->createRequest(
+            Method::GET,
+            '/client',
+            [],
+            [
+                "accept" => "application/json"
+            ]
+        );
+        $response = $this->createResponse(
+            StatusCode::OK_CODE,
+            [
+                "match" => Pact::eachLike(
+                    Pact::eachLike([
+                        "size"      => Pact::like(10),
+                        "colour"    => Pact::term("red", "red|green|blue"),
+                        "tag"       => Pact::eachLike([
+                            Pact::like("jumper"),
+                            Pact::like("shirt")
+                        ], 2)
+                    ])
+                )
+            ],
+            [
+                "Content-Type" => "application/json"
+            ]
+        );
+
+        $this->beConstructedWith($providerState, $description, $request, $response);
+
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
+            "description"       => 'A request for foo',
+            "provider_state"    => 'foo exists',
+            "request" => [
+                "method"  => "get",
+                "path"    => "/client",
+                "headers" => [
+                    "accept" => "application/json"
+                ],
+                "body" => []
+            ],
+            "response" => [
+                "status"  => 200,
+                "headers" => [
+                    "Content-Type" => "application/json"
+                ],
+                "body" => [
+                    "match" =>
+                        [
+                            "json_class" => "Pact::ArrayLike",
+                            "contents" => [
+                                "json_class" => "Pact::ArrayLike",
+                                "contents" =>[
+                                    "size" => [
+                                        "json_class" => "Pact::SomethingLike",
+                                        "contents"   => 10
+                                    ],
+                                    "colour" => [
+                                        "json_class" => "Pact::Term",
+                                        "data" => [
+                                            "generate" => "red",
+                                            "matcher" => [
+                                                "json_class" => "Regexp",
+                                                "o"          => 0,
+                                                "s"          => "red|green|blue"
+                                            ]
+                                        ]
+                                    ],
+                                    "tag" => [
+                                        "json_class" => "Pact::ArrayLike",
+                                        "contents"   => [
+                                            [
+                                                "json_class" => "Pact::SomethingLike",
+                                                "contents" => "jumper"
+                                            ],
+                                            [
+                                                "json_class" => "Pact::SomethingLike",
+                                                "contents"   => "shirt"
+                                            ]
+                                        ],
+                                        "min" => 2
+                                    ]
+                                ],
+                                "min" => 1
+                            ],
+                            "min" => 1
+                        ]
+                ]
+            ]
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
+    }
 
     /**
      * @param string $method
@@ -183,15 +183,8 @@ class InteractionSpec extends ObjectBehavior
     private function createRequest($method, $path, array $body = [], array $header = [], array $query = [])
     {
         $requestBody = new Body($body);
-
-        $requestHeader = new Header();
-        foreach ($header as $key => $value) {
-            $requestHeader->add($key, $value);
-        }
-        $requestQuery = new Query();
-        foreach ($query as $key => $value) {
-            $requestQuery->add($key, $value);
-        }
+        $requestHeader = new Header($header);
+        $requestQuery = new Query($query);
 
         return new InteractionRequest(new Method($method), new Path($path), $requestBody, $requestHeader, $requestQuery);
     }
@@ -206,11 +199,7 @@ class InteractionSpec extends ObjectBehavior
     private function createResponse($statusCode, array $body = [], array $header = [])
     {
         $requestBody = new Body($body);
-
-        $requestHeader = new Header();
-        foreach ($header as $key => $value) {
-            $requestHeader->add($key, $value);
-        }
+        $requestHeader = new Header($header);
 
         return new InteractionResponse(new StatusCode($statusCode), $requestBody, $requestHeader);
     }
