@@ -24,7 +24,7 @@ class InteractionRequestSpec extends ObjectBehavior
     {
         $method = new Method(Method::POST);
         $path   = new Path('/client');
-        $this->beConstructedWith($method, $path);
+        $this->beConstructedWith($method, $path, new Body, new Header(), new Query());
     }
 
     function it_is_initializable()
@@ -37,6 +37,7 @@ class InteractionRequestSpec extends ObjectBehavior
         \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "method"    => "post",
             "path"      => "/client",
+            "query"     => [],
             "headers"   => [],
             "body"      => []
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
@@ -55,6 +56,7 @@ class InteractionRequestSpec extends ObjectBehavior
         \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "method"    => "post",
             "path"      => "/path",
+            "query"     => [],
             "headers"   => [],
             "body"      => []
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));

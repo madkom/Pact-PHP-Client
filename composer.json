@@ -2,6 +2,7 @@
     "name": "madkom/pacto-php-client",
     "description": "Library to talk with pacto server and set expectations",
     "type": "vcs",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Darek Gafka",
@@ -10,7 +11,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "guzzlehttp/guzzle": "^6.1.1"
+        "psr/http-message": "^1.0",
+        "php-http/httplug": "^1.0.0"
     },
     "require-dev": {
         "phpspec/phpspec": "^2.4.1",

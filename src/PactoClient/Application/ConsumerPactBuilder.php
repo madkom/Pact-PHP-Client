@@ -100,5 +100,10 @@ final class ConsumerPactBuilder
         $this->responseData = $responseData;
     }
 
+    public function setup()
+    {
+        // TODO: write logic here
+    }
+
     
 }

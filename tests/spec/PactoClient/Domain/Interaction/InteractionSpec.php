@@ -58,6 +58,7 @@ class InteractionSpec extends ObjectBehavior
             "request" => [
                 "method"  => "get",
                 "path"    => "/client",
+                "query"   => [],
                 "headers" => [
                     "accept" => "application/json"
                 ],
@@ -115,6 +116,7 @@ class InteractionSpec extends ObjectBehavior
             "request" => [
                 "method"  => "get",
                 "path"    => "/client",
+                "query"   => [],
                 "headers" => [
                     "accept" => "application/json"
                 ],

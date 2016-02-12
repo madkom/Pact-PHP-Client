@@ -48,6 +48,8 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
                     "children"  => Pact::eachLike(["name" => "Fred", "age" => 2])
                 ]
             ]);
+
+        $interaction = $this->setup();
     }
 
 }

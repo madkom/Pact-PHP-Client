@@ -41,17 +41,17 @@ class InteractionRequest implements \JsonSerializable
      *
      * @param Method      $method
      * @param Path        $path
-     * @param Body|null   $body
-     * @param Header|null $header
-     * @param Query|null  $query
+     * @param Body        $body
+     * @param Header      $header
+     * @param Query       $query
      */
-    public function __construct(Method $method, Path $path, Body $body = null, Header $header = null, Query $query = null)
+    public function __construct(Method $method, Path $path, Body $body, Header $header, Query $query)
     {
         $this->method = $method;
         $this->path = $path;
-        $this->body = $body ? $body : new Body();
-        $this->header = $header ? $header : new Header();
-        $this->query = $query ? $query : new Query();
+        $this->body = $body;
+        $this->header = $header;
+        $this->query = $query;
     }
 
     /**
@@ -62,6 +62,7 @@ class InteractionRequest implements \JsonSerializable
         return [
             "method"  => $this->method,
             "path"    => $this->path,
+            "query"   => $this->query,
             "headers" => $this->header,
             "body"    => $this->body
         ];
