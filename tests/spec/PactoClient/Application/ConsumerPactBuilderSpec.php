@@ -30,14 +30,14 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
             ->with([
                 "method" => "get",
                 "path"   => "/alligators/Mary",
+                "query" => [
+                    "name" => "fred"
+                ],
                 "headers" => [
                     "Accept" => "application/json"
                 ],
                 "body" => [
                     "param" => 1
-                ],
-                "query" => [
-                    "name" => "fred"
                 ]
             ])
             ->willRespondWith([

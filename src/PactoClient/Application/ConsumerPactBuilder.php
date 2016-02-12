@@ -57,15 +57,15 @@ final class ConsumerPactBuilder
      *  Example:
      *  [
             "method" => "get",
-                "path"   => "/alligators/Mary",
+            "path"   => "/alligators/Mary",
+            "query" => [
+                "name" => "fred"
+            ]
             "headers" => [
                 "Accept" => "application/json"
             ],
             "body" => [
                 "param" => 1
-            ],
-            "query" => [
-                "name" => "fred"
             ]
         ]
      *
