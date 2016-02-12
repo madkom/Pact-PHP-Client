@@ -11,18 +11,19 @@ use Madkom\PactoClient\PactoException;
  */
 class Body implements \JsonSerializable
 {
-    /** @var  [] */
+    /** @var  string[]|int[]|\JsonSerializable[] */
     private $data = [];
 
     /**
-     * Add value under key
+     * Body constructor.
      *
-     * @param string       $key
-     * @param string|array $value
+     * @param array|object $bodyData
      */
-    public function add($key, $value)
+    public function __construct($bodyData = [])
     {
-        $this->setSingleData($key, $value);
+        foreach ($bodyData as $key => $value) {
+            $this->setSingleData($key, $value);
+        }
     }
 
     /**

@@ -8,7 +8,7 @@ use Madkom\PactoClient\Domain\Matching\Like;
 use Madkom\PactoClient\Domain\Matching\Term;
 
 /**
- * Class Pact
+ * Class Pact - Main class for building motchers
  * @package Madkom\PactoClient\Application
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
  */
@@ -43,18 +43,13 @@ class Pact
     /**
      * Return new EachLike matching
      *
-     * @param array $contents
+     * @param array|object $contents
      * @param int   $min
      *
      * @return EachLike
      */
     public static function eachLike($contents, $min = 1)
     {
-        $transformedContents = [];
-        foreach ($contents as $key => $value) {
-            $transformedContents[] = new Content($key, $value);
-        }
-
-        return new EachLike($transformedContents, $min);
+        return new EachLike($contents, $min);
     }
 }

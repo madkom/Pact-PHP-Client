@@ -15,6 +15,7 @@ use Prophecy\Argument;
  */
 class QuerySpec extends ObjectBehavior
 {
+
     function it_is_initializable()
     {
         $this->shouldHaveType('Madkom\PactoClient\Domain\Interaction\Communication\Query');
@@ -27,7 +28,9 @@ class QuerySpec extends ObjectBehavior
 
     function it_should_add_key_value()
     {
-        $this->add('name', 'Franek');
+        $this->beConstructedWith([
+            "name" => ["Franek"]
+        ]);
 
         $this->jsonSerialize()->shouldReturn([
             'name' => ['Franek']
@@ -36,19 +39,22 @@ class QuerySpec extends ObjectBehavior
 
     function it_should_add_multiple_key_values()
     {
-        $this->add('name', 'Franek');
-        $this->add('surname', 'Edwin');
+        $this->beConstructedWith([
+            "name"      => "Franek",
+            "surname"   => "Edwin"
+        ]);
 
         $this->jsonSerialize()->shouldReturn([
-            'name'      => ['Franek'],
-            'surname'   => ['Edwin']
+            'name'      => 'Franek',
+            'surname'   => 'Edwin'
         ]);
     }
 
     function it_should_return_multiple_values_if_under_same_key()
     {
-        $this->add('name', 'John');
-        $this->add('name', 'Edward');
+        $this->beConstructedWith([
+            "name" => ["John", "Edward"]
+        ]);
 
         $this->jsonSerialize()->shouldReturn([
             'name' => ['John', 'Edward']
@@ -57,19 +63,9 @@ class QuerySpec extends ObjectBehavior
 
     function it_should_throw_exception_if_empty_key_or_value_passed()
     {
-        $this->shouldThrow(PactoException::class)->during('add', ['name', '']);
-        $this->shouldThrow(PactoException::class)->during('add', ['', 'some']);
-        $this->shouldThrow(PactoException::class)->during('add', ['', '']);
-        $this->shouldThrow(PactoException::class)->during('add', ['address', []]);
+        $this->shouldThrow(PactoException::class)->during('__construct', [['name' => '']]);
+        $this->shouldThrow(PactoException::class)->during('__construct', [['' => 'some']]);
+        $this->shouldThrow(PactoException::class)->during('__construct', [['' => '']]);
     }
-
-    function it_should_add_nested_jsonSerialize()
-    {
-        $this->shouldThrow(PactoException::class)->during('add', ['name', [
-            'street' => 'WallStreet',
-            'number' => '123'
-        ]]);
-    }
-
 
 }

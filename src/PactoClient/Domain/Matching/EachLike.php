@@ -25,22 +25,14 @@ class EachLike implements \JsonSerializable
     /**
      * EachLike constructor.
      *
-     * @param array $contents
-     * @param int   $min
+     * @param array|object $contents
+     * @param int           $min
      *
      * @throws PactoException
      */
-    public function __construct(array $contents, $min)
+    public function __construct($contents, $min)
     {
-        foreach ($contents as $content) {
-            if (!($content instanceof Content)) {
-                throw new PactoException("Passed content are not type of Content");
-            }
-            $value = $content->value() instanceof \JsonSerializable ? $content->value()->jsonSerialize() : $content->value();
-
-            $this->contents[$content->key()] = $value;
-        }
-
+        $this->contents = $contents;
         $this->setMinValue($min);
     }
 

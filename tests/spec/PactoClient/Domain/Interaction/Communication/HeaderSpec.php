@@ -27,7 +27,7 @@ class HeaderSpec extends ObjectBehavior
 
     function it_should_add_key_value()
     {
-        $this->add('name', 'Franek');
+        $this->beConstructedWith(["name" => "Franek"]);
 
         $this->jsonSerialize()->shouldReturn([
             'name' => 'Franek'
@@ -36,8 +36,10 @@ class HeaderSpec extends ObjectBehavior
 
     function it_should_add_multiple_key_values()
     {
-        $this->add('name', 'Franek');
-        $this->add('surname', 'Edwin');
+        $this->beConstructedWith([
+            "name"      => "Franek",
+            "surname"   => "Edwin"
+        ]);
 
         $this->jsonSerialize()->shouldReturn([
             'name'      => 'Franek',
@@ -47,13 +49,9 @@ class HeaderSpec extends ObjectBehavior
 
     function it_should_throw_exception_if_empty_key_or_value_passed()
     {
-        $this->shouldThrow(PactoException::class)->during('add', ['name', '']);
-        $this->shouldThrow(PactoException::class)->during('add', ['', 'some']);
-        $this->shouldThrow(PactoException::class)->during('add', ['', '']);
-        $this->shouldThrow(PactoException::class)->during('add', ['address', []]);
-        $this->shouldThrow(PactoException::class)->during('add', ['address', ['street' => 'some']]);
-        $this->shouldThrow(PactoException::class)->during('add', [['street' => 'some'], 'address']);
-        $this->shouldThrow(PactoException::class)->during('add', [['street' => 'some'], ['street' => 'some']]);
+        $this->shouldThrow(PactoException::class)->during('__construct', [['name' => '']]);
+        $this->shouldThrow(PactoException::class)->during('__construct', [['' => 'some']]);
+        $this->shouldThrow(PactoException::class)->during('__construct', [['' => '']]);
     }
 
 

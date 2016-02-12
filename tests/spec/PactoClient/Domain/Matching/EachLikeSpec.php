@@ -26,7 +26,7 @@ class EachLikeSpec extends ObjectBehavior
 
     function let()
     {
-        $this->contents = [new Content('name', 'Edward')];
+        $this->contents = ['name' => 'Edward'];
         $this->min      = 1;
         $this->beConstructedWith($this->contents, $this->min);
     }
@@ -58,19 +58,30 @@ class EachLikeSpec extends ObjectBehavior
         ]);
     }
 
-//    function it_should_provide_array_of_content()
-//    {
-//        $contents = [new Content('name', 'Edward'), new Content('surname', 'Withbold')];
-//        $this->beConstructedWith($contents, 2);
-//
-//        $this->jsonSerialize()->shouldReturn()
-//    }
+    function it_should_handle_with_single_object()
+    {
+        $this->beConstructedWith(new EachLike([
+            "name" => "test"
+        ], 1), 1);
+
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
+            "json_class" => "Pact::ArrayLike",
+            "contents" => [
+                "json_class" => "Pact::ArrayLike",
+                "contents" => [
+                    "name" => "test"
+                ],
+                "min" => 1
+            ],
+            "min" => 1
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
+    }
 
     function it_should_nest_like_matcher_correctly()
     {
-        $this->beConstructedWith([new Content('id', Pact::like(10))], 1);
+        $this->beConstructedWith(['id' => Pact::like(10)], 1);
 
-        $this->jsonSerialize()->shouldReturn([
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "json_class" => "Pact::ArrayLike",
             "contents" => [
                 "id" => [
@@ -79,14 +90,14 @@ class EachLikeSpec extends ObjectBehavior
                 ]
             ],
             "min" => 1
-        ]);
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
     function it_should_nest_term_matcher_correctly()
     {
-        $this->beConstructedWith([new Content('colour', Pact::term("red", "red|green"))], 1);
+        $this->beConstructedWith(['colour' => Pact::term("red", "red|green")], 1);
 
-        $this->jsonSerialize()->shouldReturn([
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "json_class" => "Pact::ArrayLike",
             "contents" => [
                 "colour" => [
@@ -102,14 +113,14 @@ class EachLikeSpec extends ObjectBehavior
                 ]
             ],
             "min" => 1
-        ]);
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
     function it_should_nest_each_like_matcher_correctly()
     {
-        $this->beConstructedWith([new Content('colour', Pact::eachLike(["type" => 'nice']))], 1);
+        $this->beConstructedWith(['colour' => new EachLike(["type" => 'nice'], 1)], 1);
 
-        $this->jsonSerialize()->shouldReturn([
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "json_class" => "Pact::ArrayLike",
             "contents" => [
                 "colour" => [
@@ -121,23 +132,22 @@ class EachLikeSpec extends ObjectBehavior
                 ]
             ],
             "min" => 1
-        ]);
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
     function it_should_next_next_multiple_matchers_correctly()
     {
         $this->beConstructedWith(
             [
-                new Content("size", Pact::like(10)),
-                new Content("colour", Pact::term("red", "red|green|blue")),
-                new Content("tag", Pact::eachLike([
+                "size"   => Pact::like(10),
+                "colour" => Pact::term("red", "red|green|blue"),
+                "tag"    =>  new EachLike([
                     Pact::like("jumper"),
                     Pact::like("shirt")
-                ], 2))
-            ], 1
-        );
+                ], 2)
+            ], 1);
 
-        $this->jsonSerialize()->shouldReturn([
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "json_class" => "Pact::ArrayLike",
             "contents" => [
                  "size" => [
@@ -171,7 +181,7 @@ class EachLikeSpec extends ObjectBehavior
                 ]
             ],
             "min" => 1
-        ]);
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
     function it_should_throw_exception_when_wrong_min_value_passed()
@@ -181,12 +191,6 @@ class EachLikeSpec extends ObjectBehavior
         $this->shouldThrow(PactoException::class)->during('__construct', [$this->contents, null]);
         $this->shouldThrow(PactoException::class)->during('__construct', [$this->contents, '']);
         $this->shouldThrow(PactoException::class)->during('__construct', [$this->contents, 'fail']);
-    }
-
-    function it_should_throw_exception_if_passed_wrong_types()
-    {
-        $this->shouldThrow(PactoException::class)->during('__construct', [[new \stdClass()], 2]);
-        $this->shouldThrow(PactoException::class)->during('__construct', [['some'], 2]);
     }
 
 }
