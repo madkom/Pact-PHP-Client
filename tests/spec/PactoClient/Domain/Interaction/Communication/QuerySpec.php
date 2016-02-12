@@ -61,6 +61,13 @@ class QuerySpec extends ObjectBehavior
         ]);
     }
 
+    function it_should_handle_query_as_string()
+    {
+        $this->beConstructedWith("name=Mary+jane&age=8");
+
+        $this->jsonSerialize()->shouldReturn("name=Mary+jane&age=8");
+    }
+
     function it_should_throw_exception_if_empty_key_or_value_passed()
     {
         $this->shouldThrow(PactoException::class)->during('__construct', [['name' => '']]);

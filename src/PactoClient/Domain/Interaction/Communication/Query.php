@@ -2,8 +2,6 @@
 
 namespace Madkom\PactoClient\Domain\Interaction\Communication;
 
-use Madkom\PactoClient\PactoException;
-
 /**
  * Class Query
  * @package Madkom\PactoClient\Domain\Interaction\Communication
@@ -13,14 +11,34 @@ use Madkom\PactoClient\PactoException;
 class Query extends Body
 {
 
+    /** @var  string */
+    private $queryString = null;
+
     /**
      * Query constructor.
      *
-     * @param array $bodyData
+     * @param array|string $bodyData
      */
-    public function __construct(array $bodyData = [])
+    public function __construct($bodyData = [])
     {
-        parent::__construct($bodyData);
+        if (!is_string($bodyData)) {
+            parent::__construct($bodyData);
+            return;
+        }
+
+        $this->queryString = $bodyData;
+    }
+
+    /**
+     * @return array|string
+     */
+    function jsonSerialize()
+    {
+        if (is_null($this->queryString)) {
+            return parent::jsonSerialize();
+        }
+
+        return $this->queryString;
     }
 
 }

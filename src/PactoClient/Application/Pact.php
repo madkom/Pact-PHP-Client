@@ -11,6 +11,7 @@ use Madkom\PactoClient\Domain\Matching\Term;
  * Class Pact - Main class for building motchers
  * @package Madkom\PactoClient\Application
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
+ *
  */
 class Pact
 {
@@ -22,6 +23,7 @@ class Pact
      * @param $matcher
      *
      * @return Term
+     * @link https://github.com/realestate-com-au/pact/wiki/v2-flexible-matching
      */
     public static function term($generate, $matcher)
     {
@@ -34,6 +36,7 @@ class Pact
      * @param $likeValue
      *
      * @return Like
+     * @link https://github.com/realestate-com-au/pact/wiki/v2-flexible-matching
      */
     public static function like($likeValue)
     {
@@ -47,6 +50,7 @@ class Pact
      * @param int   $min
      *
      * @return EachLike
+     * @link https://github.com/realestate-com-au/pact/wiki/v2-flexible-matching
      */
     public static function eachLike($contents, $min = 1)
     {
