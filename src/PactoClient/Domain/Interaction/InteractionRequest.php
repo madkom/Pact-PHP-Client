@@ -60,51 +60,11 @@ class InteractionRequest implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            "method"  => $this->method()->jsonSerialize(),
-            "path"    => $this->path()->jsonSerialize(),
-            "headers" => $this->header()->jsonSerialize(),
-            "body"    => $this->body()->jsonSerialize()
+            "method"  => $this->method,
+            "path"    => $this->path,
+            "headers" => $this->header,
+            "body"    => $this->body
         ];
-    }
-
-    /**
-     * @return Method
-     */
-    public function method()
-    {
-        return $this->method;
-    }
-
-    /**
-     * @return Path
-     */
-    public function path()
-    {
-        return $this->path;
-    }
-
-    /**
-     * @return Body|null
-     */
-    public function body()
-    {
-        return $this->body;
-    }
-
-    /**
-     * @return Header|null
-     */
-    public function header()
-    {
-        return $this->header;
-    }
-
-    /**
-     * @return Query|null
-     */
-    public function query()
-    {
-        return $this->query;
     }
 
 }

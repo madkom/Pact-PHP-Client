@@ -30,11 +30,11 @@ class InteractionResponseSpec extends ObjectBehavior
 
     function it_should_return_values_it_was_constructed_with()
     {
-        $this->jsonSerialize()->shouldReturn([
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "status"    => 200,
             "headers"   => [],
             "body"      => []
-        ]);
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
     function it_should_be_constructed_with_more_parameters()
@@ -45,13 +45,11 @@ class InteractionResponseSpec extends ObjectBehavior
             $header     = new Header()
         );
 
-        $this->jsonSerialize()->shouldReturn(
-            [
-                "status"    => 200,
-                "headers"   => [],
-                "body"      => []
-            ]
-        );
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
+            "status"    => 200,
+            "headers"   => [],
+            "body"      => []
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
 }

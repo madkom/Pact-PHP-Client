@@ -46,9 +46,9 @@ class InteractionResponse implements \JsonSerializable
     function jsonSerialize()
     {
         return [
-            "status"    => $this->statusCode->jsonSerialize(),
-            "headers"   => $this->header->jsonSerialize(),
-            "body"      => $this->body->jsonSerialize()
+            "status"    => $this->statusCode,
+            "headers"   => $this->header,
+            "body"      => $this->body
         ];
     }
 

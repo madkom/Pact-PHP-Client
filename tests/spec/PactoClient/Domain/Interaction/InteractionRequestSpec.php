@@ -34,12 +34,12 @@ class InteractionRequestSpec extends ObjectBehavior
 
     function it_should_return_values_it_was_constructed_with()
     {
-        $this->jsonSerialize()->shouldReturn([
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "method"    => "post",
             "path"      => "/client",
             "headers"   => [],
             "body"      => []
-        ]);
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
     function it_should_be_constructable_with_more_parameters()
@@ -52,18 +52,12 @@ class InteractionRequestSpec extends ObjectBehavior
             $query  = new Query()
         );
 
-        $this->method()->shouldReturn($method);
-        $this->path()->shouldReturn($path);
-        $this->body()->shouldReturn($body);
-        $this->header()->shouldReturn($header);
-        $this->query()->shouldReturn($query);
-
-        $this->jsonSerialize()->shouldReturn([
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "method"    => "post",
             "path"      => "/path",
             "headers"   => [],
             "body"      => []
-        ]);
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
 }
