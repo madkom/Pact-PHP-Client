@@ -1,9 +1,18 @@
 {
     "name": "madkom/pact-php-client",
     "description": "Client written in PHP for Pact-Mock-Service",
-    "type": "vcs",
+    "type": "library",
     "prefer-stable": true,
     "license": "MIT",
+    "keywords": [
+        "pact",
+        "mock",
+        "service",
+        "consumer",
+        "driven",
+        "contract",
+        "client"
+    ],
     "authors": [
         {
             "name": "Darek Gafka",
