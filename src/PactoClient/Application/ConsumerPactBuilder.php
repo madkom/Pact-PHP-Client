@@ -2,12 +2,14 @@
 
 namespace Madkom\PactoClient\Application;
 
+use Madkom\PactoClient\Domain\Interaction\InteractionFactory;
+
 /**
  * Class ConsumerPactBuilder
  * @package Madkom\PactoClient\Application
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
  */
-final class ConsumerPactBuilder
+class ConsumerPactBuilder
 {
 
     /** @var  string */
@@ -21,6 +23,20 @@ final class ConsumerPactBuilder
 
     /** @var  array */
     private $responseData;
+    /**
+     * @var InteractionFactory
+     */
+    private $interactionFactory;
+
+    /**
+     * ConsumerPactBuilder constructor.
+     *
+     * @param InteractionFactory $interactionFactory
+     */
+    public function __construct(InteractionFactory $interactionFactory)
+    {
+        $this->interactionFactory = $interactionFactory;
+    }
 
     /**
      * Provider state while sending a request.
@@ -100,9 +116,12 @@ final class ConsumerPactBuilder
         $this->responseData = $responseData;
     }
 
+    /**
+     * @return \Madkom\PactoClient\Domain\Interaction\Interaction
+     */
     public function setup()
     {
-        // TODO: write logic here
+        return $this->interactionFactory->create($this->providerState, $this->requestInformation, $this->requestData, $this->responseData);
     }
 
     

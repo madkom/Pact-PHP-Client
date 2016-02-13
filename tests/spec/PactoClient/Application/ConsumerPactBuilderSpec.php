@@ -4,6 +4,8 @@ namespace spec\Madkom\PactoClient\Application;
 
 use Madkom\PactoClient\Application\ConsumerPactBuilder;
 use Madkom\PactoClient\Application\Pact;
+use Madkom\PactoClient\Domain\Interaction\Interaction;
+use Madkom\PactoClient\Domain\Interaction\InteractionFactory;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -16,6 +18,36 @@ use Prophecy\Argument;
 class ConsumerPactBuilderSpec extends ObjectBehavior
 {
 
+    function let(InteractionFactory $interactionFactory, Interaction $interaction)
+    {
+        $interactionFactory->create(
+            "An alligator named Mary exists",
+            "A request for an alligator",
+            [
+                "method" => "get",
+                "path"   => "/alligators/Mary",
+                "query" => [
+                    "name" => "fred"
+                ],
+                "headers" => [
+                    "Accept" => "application/json"
+                ],
+                "body" => [
+                    "param" => 1
+                ]
+            ],
+            [
+                "status"    => 200,
+                "headers"   => ["Content-Type" => "application/json"],
+                "body"      => [
+                    "name"      => "Mary",
+                    "children"  => Pact::eachLike(["name" => "Fred", "age" => 2])
+                ]
+            ]
+        )->willReturn($interaction);
+
+        $this->beConstructedWith($interactionFactory);
+    }
 
     function it_is_initializable()
     {
@@ -50,6 +82,8 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
             ]);
 
         $interaction = $this->setup();
+
+        $interaction->shouldHaveType(Interaction::class);
     }
 
 }

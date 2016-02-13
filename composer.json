@@ -12,7 +12,8 @@
     "minimum-stability": "dev",
     "require": {
         "psr/http-message": "^1.0",
-        "php-http/httplug": "^1.0.0"
+        "php-http/httplug": "^1.0.0",
+        "guzzlehttp/psr7": "^1.2.2"
     },
     "require-dev": {
         "phpspec/phpspec": "^2.4.1",
