@@ -58,7 +58,6 @@ class InteractionSpec extends ObjectBehavior
             "request" => [
                 "method"  => "get",
                 "path"    => "/client",
-                "query"   => [],
                 "headers" => [
                     "accept" => "application/json"
                 ],
@@ -70,8 +69,7 @@ class InteractionSpec extends ObjectBehavior
                 "status"  => 200,
                 "headers" => [
                     "Content-Type" => "application/json"
-                ],
-                "body" => []
+                ]
             ]
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
@@ -116,11 +114,9 @@ class InteractionSpec extends ObjectBehavior
             "request" => [
                 "method"  => "get",
                 "path"    => "/client",
-                "query"   => [],
                 "headers" => [
                     "accept" => "application/json"
-                ],
-                "body" => []
+                ]
             ],
             "response" => [
                 "status"  => 200,
@@ -169,6 +165,28 @@ class InteractionSpec extends ObjectBehavior
                             "min" => 1
                         ]
                 ]
+            ]
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
+    }
+
+    function it_should_set_null_values_when_no_values_provided()
+    {
+        $description   = new Description('A request for foo');
+        $providerState = new ProviderState('foo exists');
+        $request  = $this->createRequest("get", "/client");
+        $response = $this->createResponse(200);
+
+        $this->beConstructedWith($providerState, $description, $request, $response);
+
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
+            "description"       => 'A request for foo',
+            "provider_state"    => 'foo exists',
+            "request" => [
+                "method"  => "get",
+                "path"    => "/client"
+            ],
+            "response" => [
+                "status"  => 200
             ]
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }

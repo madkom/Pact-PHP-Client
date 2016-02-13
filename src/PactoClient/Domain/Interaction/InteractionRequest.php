@@ -59,13 +59,24 @@ class InteractionRequest implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return [
+        $serializedJson = [
             "method"  => $this->method,
             "path"    => $this->path,
-            "query"   => $this->query,
-            "headers" => $this->header,
-            "body"    => $this->body
         ];
+
+        if (!$this->query->isEmpty()) {
+            $serializedJson["query"] = $this->query;
+        }
+
+        if (!$this->header->isEmpty()) {
+            $serializedJson["headers"] = $this->header;
+        }
+
+        if (!$this->body->isEmpty()) {
+            $serializedJson["body"] = $this->body;
+        }
+
+        return $serializedJson;
     }
 
 }

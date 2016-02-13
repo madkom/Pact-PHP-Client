@@ -27,6 +27,11 @@ class BodySpec extends ObjectBehavior
         $this->shouldHaveType(\JsonSerializable::class);
     }
 
+    function it_should_provide_information_if_empty_data()
+    {
+        $this->isEmpty()->shouldReturn(true);
+    }
+
     function it_should_return_empty_data()
     {
         $this->jsonSerialize()->shouldReturn([]);
@@ -176,11 +181,5 @@ class BodySpec extends ObjectBehavior
                 ]
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
-//
-//    function it_should_handle_with_only_strings()
-//    {
-//        $this->shouldNotThrow(PactoException::class)->during("__construct", [[0 => "some"]]);
-//        $this->shouldNotThrow(PactoException::class)->during("__construct", [["0" => "some2"]]);
-//    }
 
 }

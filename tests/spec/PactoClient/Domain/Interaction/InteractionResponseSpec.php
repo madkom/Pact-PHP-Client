@@ -31,9 +31,7 @@ class InteractionResponseSpec extends ObjectBehavior
     function it_should_return_values_it_was_constructed_with()
     {
         \PHPUnit_Framework_Assert::assertEquals(json_encode([
-            "status"    => 200,
-            "headers"   => [],
-            "body"      => []
+            "status"    => 200
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
@@ -46,9 +44,7 @@ class InteractionResponseSpec extends ObjectBehavior
         );
 
         \PHPUnit_Framework_Assert::assertEquals(json_encode([
-            "status"    => 200,
-            "headers"   => [],
-            "body"      => []
+            "status"    => 200
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 

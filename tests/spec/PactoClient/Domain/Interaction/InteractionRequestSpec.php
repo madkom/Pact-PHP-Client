@@ -36,10 +36,7 @@ class InteractionRequestSpec extends ObjectBehavior
     {
         \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "method"    => "post",
-            "path"      => "/client",
-            "query"     => [],
-            "headers"   => [],
-            "body"      => []
+            "path"      => "/client"
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
@@ -55,10 +52,7 @@ class InteractionRequestSpec extends ObjectBehavior
 
         \PHPUnit_Framework_Assert::assertEquals(json_encode([
             "method"    => "post",
-            "path"      => "/path",
-            "query"     => [],
-            "headers"   => [],
-            "body"      => []
+            "path"      => "/path"
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 

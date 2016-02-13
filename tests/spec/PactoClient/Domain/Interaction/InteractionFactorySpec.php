@@ -143,15 +143,10 @@ class InteractionFactorySpec extends ObjectBehavior
             "provider_state"    => "provider info",
             "request" => [
                 "method" => "get",
-                "path"   => "/client",
-                "query"  => [],
-                "headers" => [],
-                "body" => []
+                "path"   => "/client"
             ],
             "response" => [
-                "status"    => 204,
-                "headers"   => [],
-                "body"      => []
+                "status"    => 204
             ]
         ]), json_encode($interaction->getWrappedObject()));
     }

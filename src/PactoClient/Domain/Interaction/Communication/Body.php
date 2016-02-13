@@ -27,6 +27,22 @@ class Body implements \JsonSerializable
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->data);
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->data;
+    }
+
+    /**
      * @param string $key
      * @param string $value
      *
@@ -39,14 +55,6 @@ class Body implements \JsonSerializable
         }
 
         $this->data[$key] = $value;
-    }
-
-    /**
-     * @return array
-     */
-    function jsonSerialize()
-    {
-        return $this->data;
     }
 
 }
