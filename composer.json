@@ -3,6 +3,7 @@
     "description": "Client written in PHP for Pact-Mock-Service",
     "type": "vcs",
     "prefer-stable": true,
+    "license": "MIT",
     "authors": [
         {
             "name": "Darek Gafka",
