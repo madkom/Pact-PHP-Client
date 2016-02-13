@@ -14,11 +14,14 @@ matrix:
     - php: hhvm
     - php: nightly
 
+before_install:
+  - composer self-update
+
 install:
   - composer install --prefer-dist --no-interaction
 
 script:
-  - bin/phpsec run --format=pretty --no-code-generation
+  - bin/phpspec run --format=pretty --no-code-generation
   - bin/phpcov merge --clover tests/coverage/clover.xml tests/coverage
 
 after_success:
