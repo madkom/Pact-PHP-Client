@@ -87,21 +87,21 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
                 ]
             ]);
 
-        $interaction = $consumerPactBuilder->setupInteraction();
+        $interaction = $consumerPactBuilder->interactionFromBuild();
 
         $interaction->shouldHaveType(Interaction::class);
     }
 
     function it_should_throw_exception_if_setting_up_not_finished_pact()
     {
-        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+        $this->shouldThrow(PactoException::class)->during('interactionFromBuild');
     }
 
     function it_should_throw_exception_if_setting_up_not_finished_pact_with_only_given()
     {
         $this->given("An alligator named Mary exists");
 
-        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+        $this->shouldThrow(PactoException::class)->during('interactionFromBuild');
     }
 
     function it_should_throw_exception_if_setting_up_no_finished_pact_with_given_and_receiving()
@@ -111,7 +111,7 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
             ->uponReceiving("Request for alligator")
         ;
 
-        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+        $this->shouldThrow(PactoException::class)->during('interactionFromBuild');
     }
 
     function it_should_throw_exception_if_setting_up_no_finished_pact_without_response()
@@ -122,7 +122,7 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
             ->with([])
         ;
 
-        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+        $this->shouldThrow(PactoException::class)->during('interactionFromBuild');
     }
 
     function it_should_throw_exception_if_setting_up_no_finished_pact_without_request()
@@ -133,7 +133,7 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
             ->willRespondWith([])
         ;
 
-        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+        $this->shouldThrow(PactoException::class)->during('interactionFromBuild');
     }
 
     function it_should_return_new_instance_of_pact_builder_for_every_change(Interaction $interaction)
@@ -167,9 +167,7 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
             ]
         )->willReturn($interaction);
 
-        $interaction = $consumerPactBuilder4->setupInteraction();
+        $interaction = $consumerPactBuilder4->interactionFromBuild();
         $interaction->shouldHaveType(Interaction::class);
     }
-
-
 }

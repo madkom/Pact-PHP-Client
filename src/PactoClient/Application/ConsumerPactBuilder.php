@@ -133,7 +133,7 @@ final class ConsumerPactBuilder
      * @return \Madkom\PactoClient\Domain\Interaction\Interaction
      * @throws PactoException
      */
-    public function setupInteraction()
+    public function interactionFromBuild()
     {
         if (!isset($this->providerState)) {
             throw new PactoException("Before setting up, you need to set provider state");
