@@ -3,6 +3,7 @@
 namespace Madkom\PactoClient\Application;
 
 use Madkom\PactoClient\Domain\Interaction\InteractionFactory;
+use Madkom\PactoClient\PactoException;
 
 /**
  * Class ConsumerPactBuilder
@@ -117,10 +118,29 @@ class ConsumerPactBuilder
     }
 
     /**
+     * Provides interaction based on passed configuration
+     *
      * @return \Madkom\PactoClient\Domain\Interaction\Interaction
+     * @throws PactoException
      */
-    public function setup()
+    public function setupInteraction()
     {
+        if (!isset($this->providerState)) {
+            throw new PactoException("Before setting up, you need to set provider state");
+        }
+
+        if (!isset($this->requestInformation)) {
+            throw new PactoException("Before setting up, you need to set request information");
+        }
+
+        if (!isset($this->requestData)) {
+            throw new PactoException("Before setting up, you need to set request data");
+        }
+
+        if (!isset($this->responseData)) {
+            throw new PactoException("Before setting up, you need to set response data");
+        }
+
         return $this->interactionFactory->create($this->providerState, $this->requestInformation, $this->requestData, $this->responseData);
     }
 

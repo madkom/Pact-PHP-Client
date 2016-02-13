@@ -12,19 +12,34 @@ use Madkom\PactoClient\Domain\Interaction\Interaction;
  */
 class RequestBuilder
 {
+    /**
+     * @var string
+     */
+    private $host;
 
     /**
-     * @param string      $host
+     * RequestBuilder constructor.
+     *
+     * @param string $host
+     */
+    public function __construct($host)
+    {
+        $this->host = $host;
+    }
+
+    /**
+     * Build request for creating new interaction
+     *
      * @param Interaction $interaction
      *
      * @return Request
      */
-    public function buildCreateInteractionRequest($host, Interaction $interaction)
+    public function buildCreateInteractionRequest(Interaction $interaction)
     {
 
         return new Request(
             "POST",
-            $host . "/interactions",
+            $this->host . "/interactions",
             [
                 "X-Pact-Mock-Service" => true,
                 "Content-Type"        => "application/json"
@@ -36,16 +51,14 @@ class RequestBuilder
     /**
      *  Builds request, which is responsible for removing expectations made by verify request
      *
-     * @param string $host
-     *
      * @return Request
      */
-    public function buildRemoveExpectationsRequest($host)
+    public function buildRemoveExpectationsRequest()
     {
 
         return new Request(
             "DELETE",
-            $host . "/interactions",
+            $this->host . "/interactions",
             [
                 "X-Pact-Mock-Service" => true
             ]
@@ -55,16 +68,14 @@ class RequestBuilder
     /**
      * Builds request, which is responsible for verifying interactions.
      *
-     * @param string $host
-     *
      * @return Request
      */
-    public function buildVerifyInteractionRequest($host)
+    public function buildVerifyInteractionRequest()
     {
 
         return new Request(
             "GET",
-            $host . "/interactions/verification",
+            $this->host . "/interactions/verification",
             [
                 "X-Pact-Mock-Service" => true
             ]
@@ -74,30 +85,34 @@ class RequestBuilder
     /**
      * Builds request for ending testing process for specific provider
      *
-     * @param string $host
-     * @param string $consumerName
-     * @param string $providerName
-     * @param string $contractDir
+     * @param string        $consumerName
+     * @param string        $providerName
+     * @param string|null   $contractDir
      *
      * @return Request
      */
-    public function buildEndProviderTestRequest($host, $consumerName, $providerName, $contractDir)
+    public function buildEndProviderTestRequest($consumerName, $providerName, $contractDir = null)
     {
+        $data = [
+            "consumer" => [
+                "name" => $consumerName
+            ],
+            "provider" => [
+                "name" => $providerName
+            ]
+        ];
+
+        if (!is_null($contractDir)) {
+            $data["pact_dir"] = $contractDir;
+        }
+
         return new Request(
             "POST",
-            $host . "/pact",
+            $this->host . "/pact",
             [
                 "X-Pact-Mock-Service" => true
             ],
-            json_encode([
-                "consumer" => [
-                    "name" => $consumerName
-                ],
-                "provider" => [
-                    "name" => $providerName
-                ],
-                "pact_dir" => $contractDir
-            ])
+            json_encode($data)
         );
     }
 

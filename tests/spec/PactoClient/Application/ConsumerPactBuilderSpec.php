@@ -6,6 +6,7 @@ use Madkom\PactoClient\Application\ConsumerPactBuilder;
 use Madkom\PactoClient\Application\Pact;
 use Madkom\PactoClient\Domain\Interaction\Interaction;
 use Madkom\PactoClient\Domain\Interaction\InteractionFactory;
+use Madkom\PactoClient\PactoException;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -81,9 +82,53 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
                 ]
             ]);
 
-        $interaction = $this->setup();
+        $interaction = $this->setupInteraction();
 
         $interaction->shouldHaveType(Interaction::class);
+    }
+
+    function it_should_throw_exception_if_setting_up_not_finished_pact()
+    {
+        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+    }
+
+    function it_should_throw_exception_if_setting_up_not_finished_pact_with_only_given()
+    {
+        $this->given("An alligator named Mary exists");
+
+        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+    }
+
+    function it_should_throw_exception_if_setting_up_no_finished_pact_with_given_and_receiving()
+    {
+        $this
+            ->given("An alligator named Mary exists")
+            ->uponReceiving("Request for alligator")
+        ;
+
+        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+    }
+
+    function it_should_throw_exception_if_setting_up_no_finished_pact_without_response()
+    {
+        $this
+            ->given("An alligator named Mary exists")
+            ->uponReceiving("Request for alligator")
+            ->with([])
+        ;
+
+        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+    }
+
+    function it_should_throw_exception_if_setting_up_no_finished_pact_without_request()
+    {
+        $this
+            ->given("An alligator named Mary exists")
+            ->uponReceiving("Request for alligator")
+            ->willRespondWith([])
+        ;
+
+        $this->shouldThrow(PactoException::class)->during('setupInteraction');
     }
 
 }

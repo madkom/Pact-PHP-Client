@@ -32,6 +32,7 @@ class RequestBuilderSpec extends ObjectBehavior
     function let()
     {
         $this->host = 'localhost:1234';
+        $this->beConstructedWith($this->host);
     }
 
     function it_is_initializable()
@@ -53,7 +54,7 @@ class RequestBuilderSpec extends ObjectBehavior
         ]);
         $interaction = new Interaction($providerState, $description, $request, $response);
 
-        $psrRequest = $this->buildCreateInteractionRequest($this->host, $interaction);
+        $psrRequest = $this->buildCreateInteractionRequest($interaction);
 
         $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
         $psrRequest->getMethod()->shouldReturn('POST');
@@ -73,7 +74,7 @@ class RequestBuilderSpec extends ObjectBehavior
 
     function it_should_build_request_for_removing_expectations()
     {
-        $psrRequest = $this->buildRemoveExpectationsRequest($this->host);
+        $psrRequest = $this->buildRemoveExpectationsRequest();
 
         $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
         $psrRequest->getMethod()->shouldReturn('DELETE');
@@ -90,7 +91,7 @@ class RequestBuilderSpec extends ObjectBehavior
 
     function it_should_build_request_for_verifying_interaction()
     {
-        $psrRequest = $this->buildVerifyInteractionRequest($this->host);
+        $psrRequest = $this->buildVerifyInteractionRequest();
 
         $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
         $psrRequest->getMethod()->shouldReturn('GET');
@@ -111,7 +112,7 @@ class RequestBuilderSpec extends ObjectBehavior
         $providerName = 'Service B';
         $contractCatalogPath = '/tmp/contracts';
 
-        $psrRequest = $this->buildEndProviderTestRequest($this->host, $consumerName, $providerName, $contractCatalogPath);
+        $psrRequest = $this->buildEndProviderTestRequest($consumerName, $providerName, $contractCatalogPath);
 
         $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
         $psrRequest->getMethod()->shouldReturn('POST');
@@ -131,6 +132,34 @@ class RequestBuilderSpec extends ObjectBehavior
                 "name" => $providerName
             ],
             "pact_dir" => $contractCatalogPath
+        ]));
+        $psrRequest->getRequestTarget()->shouldReturn("/pact");
+    }
+
+    function it_should_build_request_for_creating_contract_without_contract_dir()
+    {
+        $consumerName = 'Service A';
+        $providerName = 'Service B';
+
+        $psrRequest = $this->buildEndProviderTestRequest($consumerName, $providerName);
+
+        $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
+        $psrRequest->getMethod()->shouldReturn('POST');
+        $psrRequest->getHeaders()->shouldReturn([
+            "Host" => [
+                $this->host
+            ],
+            "X-Pact-Mock-Service" => [
+                "1"
+            ]
+        ]);
+        $psrRequest->getBody()->getContents()->shouldReturn(json_encode([
+            "consumer" => [
+                "name" => $consumerName
+            ],
+            "provider" => [
+                "name" => $providerName
+            ]
         ]));
         $psrRequest->getRequestTarget()->shouldReturn("/pact");
     }
