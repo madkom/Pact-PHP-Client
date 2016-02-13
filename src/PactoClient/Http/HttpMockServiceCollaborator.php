@@ -3,9 +3,7 @@
 namespace Madkom\PactoClient\Http;
 
 use Http\Client\HttpClient;
-use Madkom\PactoClient\Application\ConsumerPactBuilder;
 use Madkom\PactoClient\Domain\Interaction\Interaction;
-use Madkom\PactoClient\Domain\Interaction\InteractionFactory;
 use Madkom\PactoClient\Http\Service\RequestBuilder;
 use Madkom\PactoClient\PactoException;
 use Psr\Http\Message\ResponseInterface;
