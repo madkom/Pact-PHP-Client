@@ -1,5 +1,12 @@
+extensions:
+    - PhpSpec\Extension\CodeCoverageExtension
+
 suites:
   types:
     namespace: Madkom
     psr4_prefix: Madkom
     spec_path: tests
+
+code_coverage:
+    output: tests/coverage/phpspec.cov
+    format: php

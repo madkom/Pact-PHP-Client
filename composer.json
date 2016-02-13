@@ -1,6 +1,6 @@
 {
-    "name": "madkom/pacto-php-client",
-    "description": "Library to talk with pacto server and set expectations",
+    "name": "madkom/pact-php-client",
+    "description": "Client written in PHP for Pact-Mock-Service",
     "type": "vcs",
     "prefer-stable": true,
     "authors": [
@@ -18,6 +18,10 @@
     "require-dev": {
         "phpspec/phpspec": "^2.4.1",
         "phpunit/phpunit": "^5.2.4",
+        "henrikbjorn/phpspec-code-coverage": "dev-master",
+        "phpunit/php-code-coverage": "^3.0",
+        "phpunit/phpcov": "^3.0.0",
+        "satooshi/php-coveralls": "dev-master",
         "php-http/guzzle6-adapter": "^1.0.0"
     },
     "autoload": {
