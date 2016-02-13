@@ -7,6 +7,11 @@ use Madkom\PactoClient\PactoException;
 
 /**
  * Class ConsumerPactBuilder
+ * Usage:
+ * ->given
+ * ->uponReceiving
+ * ->with
+ * ->willRespondWith
  * @package Madkom\PactoClient\Application
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
  */

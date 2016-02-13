@@ -6,9 +6,16 @@ use Http\Client\HttpClient;
 use Madkom\PactoClient\Application\ConsumerPactBuilder;
 use Madkom\PactoClient\Domain\Interaction\InteractionFactory;
 use Madkom\PactoClient\Http\Service\RequestBuilder;
+use Madkom\PactoClient\PactoException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class ConsumerPactBuilder
+ * Usage:
+ * ->given
+ * ->uponReceiving
+ * ->with
+ * ->willRespondWith
  * @package Madkom\PactoClient\Http
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
  */
@@ -67,8 +74,11 @@ class HttpConsumerPactBuilder extends ConsumerPactBuilder
     {
         $interaction = parent::setupInteraction();
 
-        $this->client->sendRequest($this->requestBuilder->buildRemoveExpectationsRequest());
-        $this->client->sendRequest($this->requestBuilder->buildCreateInteractionRequest($interaction));
+        $response = $this->client->sendRequest($this->requestBuilder->buildRemoveExpectationsRequest());
+        $this->validateResponse($response);
+
+        $response = $this->client->sendRequest($this->requestBuilder->buildCreateInteractionRequest($interaction));
+        $this->validateResponse($response);
     }
 
     /**
@@ -76,7 +86,9 @@ class HttpConsumerPactBuilder extends ConsumerPactBuilder
      */
     public function verify()
     {
-        $this->client->sendRequest($this->requestBuilder->buildVerifyInteractionRequest());
+        $response = $this->client->sendRequest($this->requestBuilder->buildVerifyInteractionRequest());
+
+        $this->validateResponse($response);
     }
 
     /**
@@ -85,7 +97,21 @@ class HttpConsumerPactBuilder extends ConsumerPactBuilder
      */
     public function finishProviderVerificationProcess()
     {
-        $this->client->sendRequest($this->requestBuilder->buildEndProviderTestRequest($this->consumerName, $this->providerName, $this->contractDir));
+        $response = $this->client->sendRequest($this->requestBuilder->buildEndProviderTestRequest($this->consumerName, $this->providerName, $this->contractDir));
+
+        $this->validateResponse($response);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     *
+     * @throws PactoException
+     */
+    private function validateResponse(ResponseInterface $response)
+    {
+        if ($response->getStatusCode() != 200) {
+            throw new PactoException($response->getBody()->getContents());
+        }
     }
 
 }
