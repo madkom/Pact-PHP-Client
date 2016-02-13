@@ -3,8 +3,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $host = "localhost:1234";
 $client = new \Http\Adapter\Guzzle6\Client();
-$httpServiceCollaborator = new \Madkom\PactoClient\Http\HttpMockServiceCollaborator($client, $host, "consumer_service", "provider_service");
-$consumerPactBuilder     = new \Madkom\PactoClient\Application\ConsumerPactBuilder(new \Madkom\PactoClient\Domain\Interaction\InteractionFactory());
+$httpServiceCollaborator = new \Madkom\PactClient\Http\HttpMockServiceCollaborator($client, $host, "consumer_service", "provider_service");
+$consumerPactBuilder     = new \Madkom\PactClient\Application\ConsumerPactBuilder(new \Madkom\PactClient\Domain\Interaction\InteractionFactory());
 
 $interaction = $consumerPactBuilder
     ->given("Foo exists")
