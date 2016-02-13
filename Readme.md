@@ -14,7 +14,7 @@ Your tests against provider can be run as part of your Continues Integration sys
 For more information about how does Pact works go here [pact wiki](https://github.com/realestate-com-au/pact/wiki) and here for [microservices overview](http://dius.com.au/2016/02/03/microservices-pact) 
 
 
-### How to you Pact-Php-Client
+### How to use Pact-Php-Client
 Examples can be found at [usages catalog](http://dius.com.au/2016/02/03/microservices-pact). For more information check above links.  
 If you don't want to host your own `pact-mock-service`, you can use our docker image (You need to have `docker-compose`).  
 To do so from the root catalog type in console `docker-compose up -d` and start examples `php usage/single-interaction.php`.
