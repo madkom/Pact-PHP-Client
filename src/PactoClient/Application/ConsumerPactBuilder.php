@@ -15,7 +15,7 @@ use Madkom\PactoClient\PactoException;
  * @package Madkom\PactoClient\Application
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
  */
-class ConsumerPactBuilder
+final class ConsumerPactBuilder
 {
 
     /** @var  string */
@@ -38,10 +38,19 @@ class ConsumerPactBuilder
      * ConsumerPactBuilder constructor.
      *
      * @param InteractionFactory $interactionFactory
+     * @param null|string           $providerState
+     * @param null|string           $requestInformation
+     * @param null|[]               $requestData
+     * @param null|[]               $responseData
      */
-    public function __construct(InteractionFactory $interactionFactory)
+    public function __construct(InteractionFactory $interactionFactory, $providerState = null, $requestInformation = null, $requestData = null, $responseData = null)
     {
         $this->interactionFactory = $interactionFactory;
+
+        $this->providerState        = $providerState;
+        $this->requestInformation   = $requestInformation;
+        $this->requestData          = $requestData;
+        $this->responseData         = $responseData;
     }
 
     /**
@@ -50,13 +59,11 @@ class ConsumerPactBuilder
      *
      * @param string $providerState
      *
-     * @return $this
+     * @return self
      */
     public function given($providerState)
     {
-        $this->providerState = $providerState;
-
-        return $this;
+        return new self($this->interactionFactory, $providerState, $this->requestInformation, $this->requestData, $this->responseData);
     }
 
     /**
@@ -64,13 +71,11 @@ class ConsumerPactBuilder
      *
      * @param string $requestInfo
      *
-     * @return $this
+     * @return self
      */
     public function uponReceiving($requestInfo)
     {
-        $this->requestInformation = $requestInfo;
-
-        return $this;
+        return new self($this->interactionFactory, $this->providerState, $requestInfo, $this->requestData, $this->responseData);
     }
 
     /**
@@ -93,13 +98,11 @@ class ConsumerPactBuilder
      *
      * @param array $requestData
      *
-     * @return $this
+     * @return self
      */
     public function with(array $requestData)
     {
-        $this->requestData = $requestData;
-
-        return $this;
+        return new self($this->interactionFactory, $this->providerState, $this->requestInformation, $requestData, $this->responseData);
     }
 
     /**
@@ -116,10 +119,12 @@ class ConsumerPactBuilder
         ]
      *
      * @param array $responseData
+     *
+     * @return self
      */
     public function willRespondWith(array $responseData)
     {
-        $this->responseData = $responseData;
+        return new self($this->interactionFactory, $this->providerState, $this->requestInformation, $this->requestData, $responseData);
     }
 
     /**

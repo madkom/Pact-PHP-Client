@@ -19,9 +19,24 @@ use Prophecy\Argument;
 class ConsumerPactBuilderSpec extends ObjectBehavior
 {
 
-    function let(InteractionFactory $interactionFactory, Interaction $interaction)
+    /** @var  InteractionFactory */
+    private $interactionFactory;
+
+    function let(InteractionFactory $interactionFactory)
     {
-        $interactionFactory->create(
+        $this->interactionFactory = $interactionFactory;
+
+        $this->beConstructedWith($this->interactionFactory);
+    }
+
+    function it_is_initializable()
+    {
+        $this->shouldHaveType('Madkom\PactoClient\Application\ConsumerPactBuilder');
+    }
+
+    function it_should_set_provider_state(Interaction $interaction)
+    {
+        $this->interactionFactory->create(
             "An alligator named Mary exists",
             "A request for an alligator",
             [
@@ -47,17 +62,7 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
             ]
         )->willReturn($interaction);
 
-        $this->beConstructedWith($interactionFactory);
-    }
-
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('Madkom\PactoClient\Application\ConsumerPactBuilder');
-    }
-
-    function it_should_set_provider_state()
-    {
-        $this
+        $consumerPactBuilder = $this
             ->given("An alligator named Mary exists")
             ->uponReceiving("A request for an alligator")
             ->with([
@@ -82,7 +87,7 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
                 ]
             ]);
 
-        $interaction = $this->setupInteraction();
+        $interaction = $consumerPactBuilder->setupInteraction();
 
         $interaction->shouldHaveType(Interaction::class);
     }
@@ -130,5 +135,41 @@ class ConsumerPactBuilderSpec extends ObjectBehavior
 
         $this->shouldThrow(PactoException::class)->during('setupInteraction');
     }
+
+    function it_should_return_new_instance_of_pact_builder_for_every_change(Interaction $interaction)
+    {
+        $consumerPactBuilder = $this->given("provider has cat");
+        $consumerPactBuilder->shouldNotBe($this);
+
+        $consumerPactBuilder2 = $consumerPactBuilder->uponReceiving("a request for cat");
+        $consumerPactBuilder2->shouldNotBe($consumerPactBuilder);
+
+        $consumerPactBuilder3 = $consumerPactBuilder2->with([
+            "method" => "get",
+            "path"   => "/alligators/Mary"
+        ]);
+        $consumerPactBuilder3->shouldNotBe($consumerPactBuilder2);
+
+        $consumerPactBuilder4 = $consumerPactBuilder3->willRespondWith([
+            "status" => 200
+        ]);
+        $consumerPactBuilder4->shouldNotBe($consumerPactBuilder3);
+
+        $this->interactionFactory->create(
+            "provider has cat",
+            "a request for cat",
+            [
+                "method" => "get",
+                "path"   => "/alligators/Mary"
+            ],
+            [
+                "status"    => 200
+            ]
+        )->willReturn($interaction);
+
+        $interaction = $consumerPactBuilder4->setupInteraction();
+        $interaction->shouldHaveType(Interaction::class);
+    }
+
 
 }

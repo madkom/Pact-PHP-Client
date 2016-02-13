@@ -6,7 +6,8 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Client\HttpClient;
 use Madkom\PactoClient\Application\ConsumerPactBuilder;
-use Madkom\PactoClient\Http\HttpConsumerPactBuilder;
+use Madkom\PactoClient\Domain\Interaction\Interaction;
+use Madkom\PactoClient\Http\HttpMockServiceCollaborator;
 use Madkom\PactoClient\PactoException;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -16,9 +17,9 @@ use Psr\Http\Message\StreamInterface;
  * Class ConsumerPactBuilderSpec
  * @package spec\Madkom\PactoClient\Http
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
- * @mixin HttpConsumerPactBuilder
+ * @mixin HttpMockServiceCollaborator
  */
-class HttpConsumerPactBuilderSpec extends ObjectBehavior
+class HttpMockServiceCollaboratorSpec extends ObjectBehavior
 {
 
     /** @var  HttpClient */
@@ -32,48 +33,26 @@ class HttpConsumerPactBuilderSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(ConsumerPactBuilder::class);
+        $this->shouldHaveType(HttpMockServiceCollaborator::class);
     }
 
-    function it_should_setup_interaction(Response $response)
+    function it_should_setup_interaction(Response $response, Interaction $interaction)
     {
-        $this
-            ->given("There is an alligator")
-            ->uponReceiving("request for alligator")
-            ->with([
-                "method" => "get",
-                "path"   => "/client"
-            ])
-            ->willRespondWith([
-                "status" => 200
-            ]);
-
         $response->getStatusCode()->willReturn(200);
         $this->client->sendRequest(Argument::type(Request::class))->shouldBeCalledTimes(2)->willReturn($response);
 
-        $this->setupInteraction();
+        $this->setupInteraction($interaction);
     }
 
-    function it_should_throw_exception_if_response_is_not_correct_for_interaction(Response $response, StreamInterface $stream)
+    function it_should_throw_exception_if_response_is_not_correct_for_interaction(Interaction $interaction, Response $response, StreamInterface $stream)
     {
         $response->getStatusCode()->willReturn(500);
-
-        $this
-            ->given("There is an alligator")
-            ->uponReceiving("request for alligator")
-            ->with([
-                "method" => "get",
-                "path"   => "/client"
-            ])
-            ->willRespondWith([
-                "status" => 200
-            ]);
 
         $response->getBody()->willReturn($stream);
         $stream->getContents()->willReturn('Error');
         $this->client->sendRequest(Argument::type(Request::class))->shouldBeCalledTimes(1)->willReturn($response);
 
-        $this->shouldThrow(PactoException::class)->during('setupInteraction');
+        $this->shouldThrow(PactoException::class)->during('setupInteraction', [$interaction]);
     }
 
     function it_should_validate_interaction(Response $response)

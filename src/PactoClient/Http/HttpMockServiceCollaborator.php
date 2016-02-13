@@ -4,6 +4,7 @@ namespace Madkom\PactoClient\Http;
 
 use Http\Client\HttpClient;
 use Madkom\PactoClient\Application\ConsumerPactBuilder;
+use Madkom\PactoClient\Domain\Interaction\Interaction;
 use Madkom\PactoClient\Domain\Interaction\InteractionFactory;
 use Madkom\PactoClient\Http\Service\RequestBuilder;
 use Madkom\PactoClient\PactoException;
@@ -19,7 +20,7 @@ use Psr\Http\Message\ResponseInterface;
  * @package Madkom\PactoClient\Http
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
  */
-class HttpConsumerPactBuilder extends ConsumerPactBuilder
+class HttpMockServiceCollaborator
 {
     /**
      * @var HttpClient
@@ -64,16 +65,17 @@ class HttpConsumerPactBuilder extends ConsumerPactBuilder
         $this->contractDir = $contractDir;
 
         $this->requestBuilder = new RequestBuilder($this->host);
-        parent::__construct(new InteractionFactory());
     }
 
     /**
-     * @inheritDoc
+     * Set up interaction between consumer and provider
+     *
+     * @param Interaction $interaction
+     *
+     * @throws PactoException
      */
-    public function setupInteraction()
+    public function setupInteraction(Interaction $interaction)
     {
-        $interaction = parent::setupInteraction();
-
         $response = $this->client->sendRequest($this->requestBuilder->buildRemoveExpectationsRequest());
         $this->validateResponse($response);
 
