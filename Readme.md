@@ -15,4 +15,6 @@ For more information about how does Pact works go here [pact wiki](https://githu
 
 
 ### How to you Pact-Php-Client
-Examples can be found at [usages catalog](http://dius.com.au/2016/02/03/microservices-pact). For more information check above links.
+Examples can be found at [usages catalog](http://dius.com.au/2016/02/03/microservices-pact). For more information check above links.  
+If you don't want to host your own `pact-mock-service`, you can use our docker image (You need to have `docker-compose`).  
+To do so from the root catalog type in console `docker-compose up -d` and start examples `php usage/single-interaction.php`.
