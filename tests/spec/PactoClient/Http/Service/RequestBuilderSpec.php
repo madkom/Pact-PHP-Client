@@ -1,8 +1,8 @@
 <?php
 
-namespace spec\Madkom\PactoClient\Application\Service;
+namespace spec\Madkom\PactoClient\Http\Service;
 
-use Madkom\PactoClient\Application\Service\InteractionToPsrRequest;
+use Madkom\PactoClient\Http\Service\RequestBuilder;
 use Madkom\PactoClient\Domain\Interaction\Communication\Body;
 use Madkom\PactoClient\Domain\Interaction\Communication\Header;
 use Madkom\PactoClient\Domain\Interaction\Communication\Method;
@@ -19,19 +19,27 @@ use Prophecy\Argument;
 
 /**
  * Class InteractionToPsrRequestSpec
- * @package spec\Madkom\PactoClient\Application\Service
+ * @package spec\Madkom\PactoClient\Http\Service
  * @author  Dariusz Gafka <d.gafka@madkom.pl>
- * @mixin InteractionToPsrRequest
+ * @mixin RequestBuilder
  */
-class InteractionToPsrRequestSpec extends ObjectBehavior
+class RequestBuilderSpec extends ObjectBehavior
 {
+
+    /** @var  string */
+    private $host;
+
+    function let()
+    {
+        $this->host = 'localhost:1234';
+    }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Madkom\PactoClient\Application\Service\InteractionToPsrRequest');
+        $this->shouldHaveType('Madkom\PactoClient\Http\Service\RequestBuilder');
     }
 
-    function it_should_create_new_psr_request_from_interaction()
+    function it_should_build_request_for_creating_interaction()
     {
         $description   = new Description('A request for foo');
         $providerState = new ProviderState('foo exists');
@@ -43,17 +51,15 @@ class InteractionToPsrRequestSpec extends ObjectBehavior
         $response = $this->createResponse(StatusCode::OK_CODE, [], [
             "Content-Type" => "application/json"
         ]);
-
         $interaction = new Interaction($providerState, $description, $request, $response);
 
-        $psrRequest = $this->create($interaction);
+        $psrRequest = $this->buildCreateInteractionRequest($this->host, $interaction);
 
         $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
-
         $psrRequest->getMethod()->shouldReturn('POST');
         $psrRequest->getHeaders()->shouldReturn([
             "Host" => [
-                "localhost:1234"
+                $this->host
             ],
             "X-Pact-Mock-Service" => [
                 "1"
@@ -63,6 +69,70 @@ class InteractionToPsrRequestSpec extends ObjectBehavior
             ]
         ]);
         $psrRequest->getRequestTarget()->shouldReturn("/interactions");
+    }
+
+    function it_should_build_request_for_removing_expectations()
+    {
+        $psrRequest = $this->buildRemoveExpectationsRequest($this->host);
+
+        $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
+        $psrRequest->getMethod()->shouldReturn('DELETE');
+        $psrRequest->getHeaders()->shouldReturn([
+            "Host" => [
+                $this->host
+            ],
+            "X-Pact-Mock-Service" => [
+                "1"
+            ]
+        ]);
+        $psrRequest->getRequestTarget()->shouldReturn("/interactions");
+    }
+
+    function it_should_build_request_for_verifying_interaction()
+    {
+        $psrRequest = $this->buildVerifyInteractionRequest($this->host);
+
+        $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
+        $psrRequest->getMethod()->shouldReturn('GET');
+        $psrRequest->getHeaders()->shouldReturn([
+            "Host" => [
+                $this->host
+            ],
+            "X-Pact-Mock-Service" => [
+                "1"
+            ]
+        ]);
+        $psrRequest->getRequestTarget()->shouldReturn("/interactions/verification");
+    }
+
+    function it_should_build_request_for_creating_contract_and_ending_testing_process_for_provider()
+    {
+        $consumerName = 'Service A';
+        $providerName = 'Service B';
+        $contractCatalogPath = '/tmp/contracts';
+
+        $psrRequest = $this->buildEndProviderTestRequest($this->host, $consumerName, $providerName, $contractCatalogPath);
+
+        $psrRequest->shouldHaveType(\GuzzleHttp\Psr7\Request::class);
+        $psrRequest->getMethod()->shouldReturn('POST');
+        $psrRequest->getHeaders()->shouldReturn([
+            "Host" => [
+                $this->host
+            ],
+            "X-Pact-Mock-Service" => [
+                "1"
+            ]
+        ]);
+        $psrRequest->getBody()->getContents()->shouldReturn(json_encode([
+            "consumer" => [
+                "name" => $consumerName
+            ],
+            "provider" => [
+                "name" => $providerName
+            ],
+            "pact_dir" => $contractCatalogPath
+        ]));
+        $psrRequest->getRequestTarget()->shouldReturn("/pact");
     }
 
     /**
