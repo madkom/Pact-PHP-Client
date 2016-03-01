@@ -191,6 +191,27 @@ class InteractionSpec extends ObjectBehavior
         ]), json_encode($this->jsonSerialize()->getWrappedObject()));
     }
 
+    function it_should_not_contains_provider_state_if_is_empty()
+    {
+        $description   = new Description('A request for foo');
+        $providerState = new ProviderState('');
+        $request  = $this->createRequest("get", "/client");
+        $response = $this->createResponse(200);
+
+        $this->beConstructedWith($providerState, $description, $request, $response);
+
+        \PHPUnit_Framework_Assert::assertEquals(json_encode([
+            "description"       => 'A request for foo',
+            "request" => [
+                "method"  => "get",
+                "path"    => "/client"
+            ],
+            "response" => [
+                "status"  => 200
+            ]
+        ]), json_encode($this->jsonSerialize()->getWrappedObject()));
+    }
+
     /**
      * @param string $method
      * @param string $path

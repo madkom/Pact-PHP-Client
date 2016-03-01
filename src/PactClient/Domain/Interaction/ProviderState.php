@@ -40,11 +40,15 @@ class ProviderState implements \JsonSerializable
      */
     private function setValue($value)
     {
-        if (!$value) {
-            throw new PactException("Can't create empty description of Provider State");
-        }
-
         $this->value = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->value ? false : true;
     }
 
 }

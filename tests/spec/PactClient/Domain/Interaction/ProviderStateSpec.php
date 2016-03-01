@@ -32,10 +32,13 @@ class ProviderStateSpec extends ObjectBehavior
     public function it_should_return_value()
     {
         $this->jsonSerialize()->shouldReturn($this->value);
+        $this->isEmpty()->shouldReturn(false);
     }
 
     public function it_should_throw_exception_if_empty_value_passed()
     {
-        $this->shouldThrow(PactException::class)->during('__construct', ['']);
+        $this->shouldNotThrow(PactException::class)->during('__construct', ['']);
+
+        $this->isEmpty()->shouldReturn(true);
     }
 }

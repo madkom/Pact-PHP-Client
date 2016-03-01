@@ -48,12 +48,17 @@ class Interaction implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return [
-            "description"    => $this->description,
-            "provider_state" => $this->providerState,
-            "request"        => $this->interactionRequest,
-            "response"       => $this->interactionResponse
+        $interaction =  [
+            "description"    => $this->description
         ];
+
+        if (!$this->providerState->isEmpty()) {
+            $interaction['provider_state'] = $this->providerState;
+        }
+        $interaction['request']  = $this->interactionRequest;
+        $interaction['response'] = $this->interactionResponse;
+
+        return $interaction;
     }
 
 }
