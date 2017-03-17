@@ -1,3 +1,8 @@
+php:
+  image: alexwijn/docker-git-php-composer
+  volumes:
+    - "$PWD:/data/app"
+  command: sleep 9999
 pacto-mock-server:
   image: madkom/pact-mock-service:latest
   ports:

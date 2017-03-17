@@ -50,11 +50,20 @@ class Body implements \JsonSerializable
      */
     private function setSingleData($key, $value)
     {
-        if (!$key || !$value) {
+        if ($this->isDataIncorrect($key) || $this->isDataIncorrect($value)) {
             throw new PactException("Key and values should'nt be empty");
         }
 
         $this->data[$key] = $value;
+    }
+
+    /**
+     * @param mixed $data
+     * @return bool
+     */
+    private function isDataIncorrect($data)
+    {
+        return (is_null($data) || $data === '') || (is_array($data) && empty($data));
     }
 
 }

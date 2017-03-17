@@ -1,5 +1,5 @@
-extensions:
-    - PhpSpec\Extension\CodeCoverageExtension
+#extensions:
+#    - PhpSpec\Extension\CodeCoverageExtension
 
 suites:
   types:
