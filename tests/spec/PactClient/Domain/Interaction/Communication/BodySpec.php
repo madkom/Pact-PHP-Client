@@ -67,6 +67,10 @@ class BodySpec extends ObjectBehavior
         $this->shouldThrow(PactException::class)->during('__construct', [['' => 'some']]);
         $this->shouldThrow(PactException::class)->during('__construct', [['' => '']]);
         $this->shouldThrow(PactException::class)->during('__construct', [['address' => []]]);
+        $this->shouldThrow(PactException::class)->during('__construct', [['address' => '']]);
+
+        $this->shouldNotThrow(PactException::class)->during('__construct', [['address' => 0]]);
+        $this->shouldNotThrow(PactException::class)->during('__construct', [[0 => 'some']]);
     }
 
     function it_should_add_nested_data()
